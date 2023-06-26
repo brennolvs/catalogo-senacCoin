@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { api } from '../../services';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Image } from 'react-native';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 function Header() {
+
+    const [movimentacoes, setMovimentacoes] = useState([]);
+    const userId = '3b700ecc-cec9-4be4-8c00-48bced543861'
+
+    useEffect(() => {
+        async function getSenacCoin() {
+            const response = await api.get(`/api/SenacCoin/FiltrarSenacCoinByUsuarioId/${userId}`);
+
+            setMovimentacoes(response.data);
+            console.log(response.data);
+        }
+
+        getSenacCoin();
+    }, []);
 
     return (
         // <SafeAreaView>
@@ -30,7 +45,7 @@ function Header() {
                 </Text>
                 <View style={styles.saldo}>
                     <Image style={styles.image} source={require('../../icon/chinese-coin.png')} /> 
-                    <Text style={{ fontSize: 15, color: '#FFF', marginLeft:10, fontWeight: 'bold' }}>1.600,00</Text>
+                    <Text style={{ fontSize: 15, color: '#FFF', marginLeft:10, fontWeight: 'bold' }}>{movimentacoes.saldo}</Text>
                 </View>
             </View>
 
